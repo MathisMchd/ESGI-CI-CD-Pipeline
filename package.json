@@ -1,0 +1,30 @@
+{
+  "name": "tests-e2e",
+  "version": "1.0.0",
+  "main": "src/app.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "docker:start": "docker run --name mariadb -e MARIADB_ROOT_PASSWORD=root -e MARIADB_DATABASE=db -e MARIADB_USER=user -e MARIADB_PASSWORD=pass -p 3306:3306 -d mariadb:latest",
+    "docker:stop": "docker stop mariadb && docker rm mariadb",
+    "start": "nodemon src/app.js",
+    "dev": "npm run docker:start && wait-port localhost:3306 && npm run start",
+    "test": "jest"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "dotenv": "^17.0.1",
+    "express": "^5.1.0",
+    "mariadb": "^3.4.4",
+    "sequelize": "^6.37.7"
+  },
+  "devDependencies": {
+    "cypress": "^14.5.1",
+    "jest": "^30.0.4",
+    "nodemon": "^3.1.10"
+  }
+}
