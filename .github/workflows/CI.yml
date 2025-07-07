@@ -1,0 +1,65 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+
+    services:
+      mariadb:
+        image: mariadb:latest
+        env:
+          MARIADB_ROOT_PASSWORD: root
+          MARIADB_DATABASE: db
+          MARIADB_USER: user
+          MARIADB_PASSWORD: pass
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h localhost -u root -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    env:
+      DB_HOST: 127.0.0.1
+      DB_PORT: 3306
+      DB_NAME: db
+      DB_USER: user
+      DB_PASS: pass
+      EXPRESS_PORT: 3000
+
+    steps:
+      - name: Checkout le code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Installer les dépendances
+        run: npm install
+
+      - name: Linter (optionnel si tu en as un, sinon commente)
+        run: echo "Linter à ajouter ici si tu utilises ESLint ou autre"
+
+      - name: Attendre que MariaDB soit prêt
+        run: npx wait-port 127.0.0.1:3306
+
+      - name: Fixtures
+        run: npm run test:fixtures
+
+      - name: TU Jtests
+        run: npm run test
+
+      - name: Lancer les tests E2E (cypress)
+        run: |
+          nohup node src/app.js & 
+          npx wait-port localhost:3000
+          npm run test:e2e

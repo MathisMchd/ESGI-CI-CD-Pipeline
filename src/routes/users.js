@@ -19,7 +19,7 @@ router.post('/submit', async (req, res) => {
   try {
     const { name, email } = req.body;
     const user = await User.create({ name, email });
-    res.send(`<p>Utilisateur créé avec succès ! : Utilisateur : ${user.name} (${user.email}) <a href="/">Voir la liste entière</a></p>`);
+    res.send(`<p> Utilisateur créé avec succès ! : Utilisateur : ${user.name} (${user.email}) <a href="/">Voir la liste entière</a></p>`);
   } catch (error) {
     res.status(400).send('Erreur lors de la création de l\'utilisateur : ' + error.message);
   }
@@ -36,4 +36,15 @@ router.get('/', async (req, res) => {
   res.send(html);
 });
 
+
+
+router.get('/submissions', async (req, res) => {
+  const users = await User.findAll();
+  let html = '<h1>Liste des utilisateurs </h1><ul>';
+  users.forEach((user, i) => {
+    html += `<li>${i + 1}. ${user.name} - ${user.email}</li>`;
+  });
+  html += '</ul><a href="/form">Ajouter un utilisateur</a>';
+  res.send(html);
+});
 module.exports = router;

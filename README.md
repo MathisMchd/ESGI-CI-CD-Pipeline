@@ -1,8 +1,8 @@
 
-# Démarrage de l'application
+# Commandes
 
-- `npm run dev`  
+- `npm run docker:start`  : lance docker avec MariaDb
+- `npm run dev`: lance express
+- `npm run test` : lance Tests Unitaires jtests
+- `npm run test:e2e` : lance Tests E2E
 
-
-
-docker run --name mariadb -e MARIADB_ROOT_PASSWORD=root -e MARIADB_DATABASE=db -e MARIADB_USER=user -e MARIADB_PASSWORD=pass -p 3306:3306 -d mariadb:latest

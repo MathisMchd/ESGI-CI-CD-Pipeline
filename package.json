@@ -10,7 +10,9 @@
     "docker:stop": "docker stop mariadb && docker rm mariadb",
     "start": "nodemon src/app.js",
     "dev": "npm run docker:start && wait-port localhost:3306 && npm run start",
-    "test": "jest"
+    "test": "jest",
+    "test:e2e": "node src/app.js && npx cypress run",
+    "test:fixtures": "node tests/fixtures/seed.js"
   },
   "keywords": [],
   "author": "",
